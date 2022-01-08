@@ -1,6 +1,6 @@
 const db = require("../models");
-const Campaign = db.campaigns;
-const User = db.users;
+const Campaign = db.campaign;
+const User = db.user;
 const Comment = db.comment
 const Campaign_User = db.campaign_user;
 const Op = db.Sequelize.Op;
@@ -111,45 +111,54 @@ exports.add = (req, res) => {
   });
 };
 
-exports.findAll = (req, res) => {
+exports.findMessageByCampaignID = (req, res) => {
     const idCampaign = req.params.id;
-    var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
-  
-    Campaign_User.findAll({
-        where: {
+    
+    Comment.findAll({
+      include:[
+        {
+          model : Campaign_User,
+          as : "campaignusercomment",
+          include:[
+              {
+                model: db.user,
+                as : "campaignsuser"
+              },
+          ],
+          where: {
             campaign_id: {
-              [Op.eq]: req.body.campaign_id
-            },
-            user_id: {
-              [Op.eq]: req.body.user_id
+              [Op.eq]: idCampaign
             }
           }
-    }).then((data) =>{
-        //masukan data message kedalam tabel
-        console.log(data[0].id);
-        if(!data[0].id){
-            res.status(404).send({
-                message: `Data User =${req.body.user_id} tidak terdaftar dalam Data Campaign = ${req.body.campaign_id} .`
-            });
-        }else{
-            
-            // Create a comment
-            const comment = {
-                campaignUserId : data[0].id,
-                message: req.body.message
-            };
-            Comment.create(comment)
-            .then(data => {
-                res.send(data);
-                })
-            .catch(err => {
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occurred while creating the Tutorial."
-                });
-            });
         }
+      ]
+    }).then((data) =>{
         
+      res.send(data);
+      
     });
+
+    // Campaign_User.findAll({
+    //   include: 
+    //   [
+    //       {
+            
+    //           model: Comment,
+    //           as: "comments",
+    //           attributes: ["id", "message","createdAt"],
+
+              
+    //       },
+    //   ],
+    //   where: {
+    //       campaign_id: {
+    //         [Op.eq]: idCampaign
+    //       }
+    //   }
+    // }).then((data) =>{
+        
+    //     res.send(data);
+        
+    // });
 };
 

@@ -1,5 +1,5 @@
 const db = require("../models");
-const Campaign = db.campaigns;
+const Campaign = db.campaign;
 const News = db.news;
 const Campaign_News = db.Campaign_News;
 const Op = db.Sequelize.Op;

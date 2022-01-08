@@ -1,5 +1,5 @@
 const db = require("../models");
-const Campaign = db.campaigns;
+const Campaign = db.campaign;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial

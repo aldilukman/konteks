@@ -3,13 +3,13 @@ module.exports = app => {
   
     var router = require("express").Router();
   
-    // Create a new campaign
+    // Create a new campaign news
     router.post("/", campaignsnews.addCampaignNews);
   
-    // Retrieve all campaign
+    // Retrieve all campaign news
     router.get("/", campaignsnews.findAll);
   
-    // Retrieve a single campaign with id
+    // Retrieve a single campaign news with id
     router.get("/:id", campaignsnews.findOne);
   
   

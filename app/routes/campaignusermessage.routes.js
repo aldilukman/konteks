@@ -3,10 +3,11 @@ module.exports = app => {
   
     var router = require("express").Router();
   
-    // Create a new campaign
+    // Create a new meesage
     router.post("/", campaignsusermessage.add);
   
-
+     // Retrieve all messaage by Campaign id
+     router.get("/:id", campaignsusermessage.findMessageByCampaignID);
   
     app.use('/api/campaignsusermessage', router);
   };

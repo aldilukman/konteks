@@ -1,6 +1,6 @@
 const db = require("../models");
-const Campaign = db.campaigns;
-const User = db.users;
+const Campaign = db.campaign;
+const User = db.user;
 const Campaign_User = db.campaign_user;
 const Op = db.Sequelize.Op;
 

@@ -1,6 +1,6 @@
 const db = require("../models");
 const bcrypt = require("bcrypt");
-const User = db.users;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
