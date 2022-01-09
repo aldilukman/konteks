@@ -1,10 +1,11 @@
 module.exports = app => {
     const news = require("../controllers/news.controller.js");
-  
+    const multer  = require('multer')
+    const upload = multer({ dest: './public/data/uploads/' })
     var router = require("express").Router();
   
     // Create a new news
-    router.post("/", news.create);
+    router.post("/", upload.single('image'), news.create);
   
     // Retrieve all news
     router.get("/", news.findAll);
@@ -12,6 +13,9 @@ module.exports = app => {
     // Retrieve a single news with id
     router.get("/:id", news.findOne);
   
+    // Retrieve a single news with id
+    router.get("/image/:id", news.findOneImage);
+
     // Update a news with id
     router.put("/:id", news.update);
   

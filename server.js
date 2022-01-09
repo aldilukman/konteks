@@ -15,8 +15,12 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
+// parse requests of content-type - application/form-data
+//app.use(bodyParser.json);
+//app.use(bodyParser.urlencoded({ extended: true }));
+
 const db = require("./app/models");
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
     console.log("Drop and re-sync db.");
   });
 

@@ -8,6 +8,12 @@ module.exports = (sequelize, Sequelize) => {
       },
       link: {
         type: Sequelize.STRING
+      },
+      nameimage: {
+        type: Sequelize.STRING
+      },
+      pathimage: {
+        type: Sequelize.STRING
       }
     });
   

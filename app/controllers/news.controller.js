@@ -1,22 +1,40 @@
 const db = require("../models");
 const News = db.news;
 const Op = db.Sequelize.Op;
-
+const path = require('path')
 // Create and Save a new News
 exports.create = (req, res) => {
+  // res.status(400).send({
+  //   message: req.file
+  // });
+  //return;
   // Validate request
-  if (!req.body.title || !req.body.content || !req.body.link) {
+  if (!req.body.title) {
+    res.status(400).send({
+      message: "Title can not be empty!"
+    });
+    return;
+  }
+  if (!req.body.content) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
-
+  if (!req.body.link) {
+    res.status(400).send({
+      message: "Link can not be empty!"
+    });
+    return;
+  }
+  
   // Create a News
   const news = {
     title: req.body.title,
     content: req.body.content,
-    link: req.body.link
+    link: req.body.link,
+    nameimage: req.file.originalname,
+    pathimage : req.file.path
   };
 
   // Save News in the database
@@ -67,6 +85,31 @@ exports.findOne = (req, res) => {
           message: "Error retrieving News with id=" + id
         });
       });
+};
+
+// Find a single News with an id
+exports.findOneImage = (req, res) => {
+  const id = req.params.id;
+  News.findByPk(id)
+    .then(data => {
+      if (data) {
+        //res.sendFile(data.pathimage);
+        
+
+        //path.join(__dirname, '../../../')
+        res.type('png');
+        res.sendFile(path.join(__dirname, '../../') +"\\"+data.pathimage);
+      } else {
+        res.status(404).send({
+          message: `Cannot find News with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error =" + err.message
+      });
+    });
 };
 
 // Update a News by the id in the request
