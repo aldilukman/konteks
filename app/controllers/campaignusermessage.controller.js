@@ -122,7 +122,8 @@ exports.findMessageByCampaignID = (req, res) => {
           include:[
               {
                 model: db.user,
-                as : "campaignsuser"
+                as : "user",
+                attributes: ["id", "name"],
               },
           ],
           where: {

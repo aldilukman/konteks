@@ -5,9 +5,8 @@ module.exports = app => {
   
     // Create a new meesage
     router.post("/", campaignsusermessage.add);
-  
-     // Retrieve all messaage by Campaign id
-     router.get("/:id", campaignsusermessage.findMessageByCampaignID);
+    // Retrieve all messaage by Campaign id
+    router.get("/:id", campaignsusermessage.findMessageByCampaignID);
   
     app.use('/api/campaignsusermessage', router);
   };

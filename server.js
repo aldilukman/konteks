@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
-db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
     console.log("Drop and re-sync db.");
   });
 
@@ -35,6 +35,7 @@ require("./app/routes/news.routes")(app);
 require("./app/routes/newscampaign.routes")(app);
 require("./app/routes/rule.routes")(app);
 require("./app/routes/campaignusermessage.routes")(app);
+
 // set port, listen for requests
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

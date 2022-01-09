@@ -6,8 +6,8 @@ module.exports = (sequelize, Sequelize) => {
       content: {
         type: Sequelize.STRING
       },
-      hyperlink: {
-        type: Sequelize.BOOLEAN
+      link: {
+        type: Sequelize.STRING
       }
     });
   

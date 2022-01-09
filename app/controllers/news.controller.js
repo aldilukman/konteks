@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new News
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title || !req.body.content) {
+  if (!req.body.title || !req.body.content || !req.body.link) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -16,7 +16,7 @@ exports.create = (req, res) => {
   const news = {
     title: req.body.title,
     content: req.body.content,
-    hyperlink: req.body.hyperlink ? req.body.hyperlink : false
+    link: req.body.link
   };
 
   // Save News in the database

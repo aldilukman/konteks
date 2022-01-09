@@ -57,9 +57,14 @@ db.user.belongsToMany(db.campaign, {
   foreignKey: "user_id",
 });
 
-//db.campaign_user.hasMany(db.users, { as: "user_id" });
+db.campaign_user.belongsTo(db.user,{
+  foreignKey: "user_id",
+  as: "user",
+})
+
 
 //one to many relation campaignuser - comment
+
 db.campaign_user.hasMany(db.comment, { as: "comments" });
 db.comment.belongsTo(db.campaign_user, {
   foreignKey: "campaignUserId",
