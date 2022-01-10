@@ -1,10 +1,10 @@
 module.exports = app => {
     const campaignsuser = require("../controllers/campaignuser.controller.js");
-  
+    const verifyJwtTokenController = require("../controllers/verifyJwtToken.controller.js");
     var router = require("express").Router();
   
     // Create a new campaign user
-    router.post("/", campaignsuser.addCampaignUser);
+    router.post("/",[verifyJwtTokenController.verifyToken], campaignsuser.addCampaignUser);
   
     // Retrieve all campaign user
     router.get("/", campaignsuser.findAll);

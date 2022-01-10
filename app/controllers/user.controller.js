@@ -1,8 +1,9 @@
 const db = require("../models");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = db.user;
 const Op = db.Sequelize.Op;
-
+const config = require('../config/configroles');
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
   // Validate request
@@ -16,21 +17,94 @@ exports.create = (req, res) => {
   // Create a user
   const user = {
     name: req.body.name,
-    password: req.body.password
+    password: bcrypt.hashSync(req.body.password, 8)
   };
 
   // Save User in the database
   User.create(user)
     .then(data => {
-      res.send(data);
+      res.status(200).send({
+        auth: true,
+        id: req.body.id,
+        message: "User registered successfully!",
+        errors: null,
+      });
     })
     .catch(err => {
       res.status(500).send({
+        auth: false,
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the User."
       });
     });
 };
+
+// Create and Save a new Tutorial
+exports.signin = (req, res) => {
+  // Validate request
+  if (!req.body.name) {
+    res.status(400).send({
+      message: "Name can not be empty!"
+    });
+    return;
+  }
+  if (!req.body.password) {
+    res.status(400).send({
+      message: "Password can not be empty!"
+    });
+    return;
+  }
+  User.findOne({
+    where :{
+      name : req.body.name
+    }
+  }).then(user => {
+    if (!user){
+      return res.status(404).send({
+        auth: false,
+        id: req.body.id,
+        accessToken: null,
+        message: "Error",
+        errors: "User Not Found."
+      });
+    }
+    
+    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+    if (!passwordIsValid) {
+      return res.status(401).send({
+        auth: false,
+        id: req.body.id,
+        accessToken: null,
+        message: "Error",
+        errors: "Invalid Password!"
+      });
+    }
+    var token = 'Bearer ' + jwt.sign({
+      id: user.id
+    }, config.secret, {
+      expiresIn: 86400 //24h expired
+    });
+
+    res.status(200).send({
+      auth: true,
+      id: req.body.id,
+      accessToken: token,
+      message: "Success",
+      errors: null
+    });
+
+  }).catch(err => {
+    res.status(500).send({
+      auth: false,
+      id: req.body.id,
+      accessToken: null,
+      message: "Error",
+      errors: err.message
+    });
+  });
+  
+};
+
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
@@ -135,6 +209,14 @@ exports.deleteAll = (req, res) => {
               err.message || "Some error occurred while removing all users."
           });
         });
+};
+
+exports.signout = (req, res) => {
+//   req.user.deleteToken(req.token,(err,user)=>{
+//     if(err) return res.status(400).send(err);
+//     res.sendStatus(200);
+// });
+return;
 };
 
 // Find all published Tutorials

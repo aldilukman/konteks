@@ -1,10 +1,10 @@
 module.exports = app => {
     const campaigns = require("../controllers/campaign.controller.js");
-  
+    const verifyJwtTokenController = require("../controllers/verifyJwtToken.controller.js");
     var router = require("express").Router();
   
     // Create a new campaign
-    router.post("/", campaigns.create);
+    router.post("/",[verifyJwtTokenController.verifyToken], campaigns.create);
   
     // Retrieve all campaign
     router.get("/", campaigns.findAll);
@@ -13,13 +13,13 @@ module.exports = app => {
     router.get("/:id", campaigns.findOne);
   
     // Update a campaign with id
-    router.put("/:id", campaigns.update);
+    router.put("/:id",[verifyJwtTokenController.verifyToken], campaigns.update);
   
     // Delete a campaign with id
-    router.delete("/:id", campaigns.delete);
+    router.delete("/:id",[verifyJwtTokenController.verifyToken], campaigns.delete);
   
     // Delete all campaign
-    router.delete("/", campaigns.deleteAll);
+    router.delete("/",[verifyJwtTokenController.verifyToken], campaigns.deleteAll);
   
     app.use('/api/campaigns', router);
   };
