@@ -4,16 +4,19 @@ module.exports = app => {
     var router = require("express").Router();
   
     // Create a new User
-    router.post("/", [verifyJwtTokenController.verifyToken], users.create);
+    // [verifyJwtTokenController.verifyToken]
+    router.post("/", users.create);
   
     // Login
     router.post("/signin", users.signin);
+     // Forget Password
+     router.post("/forget", users.forget);
 
     // Login
     router.get("/signout", users.signout);
 
     // Retrieve all User
-    router.get("/", [verifyJwtTokenController.verifyToken], users.findAll);
+    router.get("/", users.findAll);
   
     // Retrieve a single User with id
     router.get("/:id",[verifyJwtTokenController.verifyToken], users.findOne);
@@ -25,7 +28,7 @@ module.exports = app => {
     router.delete("/:id",[verifyJwtTokenController.verifyToken], users.delete);
   
     // Delete all User
-    router.delete("/",[verifyJwtTokenController.verifyToken], users.deleteAll);
+    router.delete("/", users.deleteAll);
   
     app.use('/api/users', router);
   };
